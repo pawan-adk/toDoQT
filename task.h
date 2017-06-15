@@ -12,12 +12,17 @@ class Task : public QWidget
     Q_OBJECT
 
 public:
-    explicit Task(QWidget *parent = 0);
+    explicit Task(const QString& task, QWidget *parent = 0);
     ~Task();
 
     void setName(const QString& name);
     QString name() const;
     bool isCompleted() const;
+
+public slots:
+    void rename();
+signals:
+    void removed(Task* task);
 
 private:
     Ui::Task *ui;

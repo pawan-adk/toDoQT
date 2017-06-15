@@ -1,11 +1,20 @@
 #include "task.h"
 #include "ui_task.h"
 
-Task::Task(QWidget *parent) :
+#include <QInputDialog>
+#include <QDebug>
+
+Task::Task(const QString &task, QWidget *parent) :
     QWidget(parent),
+
     ui(new Ui::Task)
 {
     ui->setupUi(this);
+    setName(task);
+    connect(ui->editButton, &QPushButton::clicked, this, &Task::rename);
+    connect(ui->removeButton, &QPushButton::clicked, [this] {
+        emit removed(this);
+    });
 }
 
 Task::~Task()
@@ -26,4 +35,13 @@ QString Task::name() const
 bool Task::isCompleted() const
 {
     return ui->checkBox->isChecked();
+}
+
+void Task::rename()
+{
+    bool ok;
+    QString value = QInputDialog::getText(this, tr("Edit Task"), tr("Task Name"),QLineEdit::Normal, this->name(), &ok);
+
+    if( ok && !value.isEmpty())
+        setName(value);
 }
