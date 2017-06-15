@@ -5,9 +5,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
     connect(ui->addTaskButton, &QPushButton::clicked,
             QApplication::instance(), &QApplication::quit);
-    ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
