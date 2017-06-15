@@ -15,6 +15,10 @@ public:
     explicit Task(QWidget *parent = 0);
     ~Task();
 
+    void setName(const QString& name);
+    QString name() const;
+    bool isCompleted() const;
+
 private:
     Ui::Task *ui;
 };
