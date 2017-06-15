@@ -11,7 +11,12 @@ Task::Task(const QString &task, QWidget *parent) :
 {
     ui->setupUi(this);
     setName(task);
+
+    //slots
     connect(ui->editButton, &QPushButton::clicked, this, &Task::rename);
+    connect(ui->checkBox, &QCheckBox::toggled, this,&Task::taskChecked);
+
+    //signals
     connect(ui->removeButton, &QPushButton::clicked, [this] {
         emit removed(this);
     });
@@ -44,4 +49,12 @@ void Task::rename()
 
     if( ok && !value.isEmpty())
         setName(value);
+}
+
+void Task::taskChecked(bool checked)
+{
+    QFont font(ui->checkBox->font());
+    font.setStrikeOut(checked);
+    ui->checkBox->setFont(font);
+    emit statusChanged(this);
 }

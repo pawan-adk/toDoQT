@@ -28,8 +28,10 @@ void MainWindow::addTask()
         qDebug()<<"The button is pressed";
         Task* task = new Task(name);
         connect(task, &Task::removed, this, &MainWindow::removeTask); //when we are creating the new task then it should be connected to slot
+        connect(task, &Task::statusChanged, this, &MainWindow::taskStatusChanged);
         mTasks.append(task);
         ui->tasksLayout->addWidget(task);
+        updateStatus();
     }
 
 }
@@ -42,3 +44,27 @@ void MainWindow::removeTask(Task *task) //This signature must match the one comi
     task->setParent(nullptr);
     delete task;
 }
+
+void MainWindow::taskStatusChanged(Task *task){
+
+    qDebug()<<"This method is invoked";
+    updateStatus();
+}
+
+void MainWindow::updateStatus(){
+
+    int completedCount = 0;
+    for(auto &t : mTasks) {
+
+        if(t->isCompleted()) {
+
+            completedCount++;
+        }
+    }
+
+    int toDoCount = mTasks.size() - completedCount;
+
+    ui->statusLabel->setText(QString("Status: %1 todo / %2 completed").arg(toDoCount).arg(completedCount));
+}
+
+
